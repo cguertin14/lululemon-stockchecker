@@ -19,7 +19,12 @@ func main() {
 		}
 	}
 
+	// In the case of an online-only product of one size,
+	// if the page returned status code is 302, the product
+	// is out-of-stock
 	isInStock := res.StatusCode != http.StatusFound
+
+	// Send alert to Slack
 	if err = slackWebhook(isInStock, uri); err != nil {
 		log.Fatalf("failed to inform slack: %s", err)
 	}
@@ -29,7 +34,7 @@ func slackWebhook(isInStock bool, uri string) error {
 	slackWebhookUri := os.Getenv("SLACK_WEBHOOK_URI")
 	values := map[string]string{"text": fmt.Sprintf("The product %s is **in stock**.", uri)}
 	if !isInStock {
-		values["text"] = fmt.Sprintf("The product %s is **out of stock**.", uri)
+		values["text"] = fmt.Sprintf("The product %s is **out-of-stock**.", uri)
 	}
 
 	data, err := json.Marshal(values)
@@ -41,6 +46,9 @@ func slackWebhook(isInStock bool, uri string) error {
 	if err != nil {
 		return err
 	}
+
+	// Print alert to stdout
+	fmt.Println(values["text"])
 
 	return nil
 }
