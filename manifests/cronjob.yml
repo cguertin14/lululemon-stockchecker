@@ -12,7 +12,7 @@ spec:
       template:
         spec:
           containers:
-          - name: k3supdater
+          - name: lululemon-stockchecker
             image: quay.io/cguertin14/lululemon-stockchecker
             env:
             # - name: LULULEMON_URI
