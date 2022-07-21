@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: k3supdater-cron
+  name: lululemon-stockchecker-cron
 spec:
   # Cronjob will run every hour to check for product availability.
   schedule: '@hourly'
