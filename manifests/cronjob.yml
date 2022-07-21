@@ -15,8 +15,8 @@ spec:
           - name: k3supdater
             image: quay.io/cguertin14/lululemon-stockchecker
             env:
-            - name: LULULEMON_URI
-              value: https://some-lululemon-product.com # TODO: change this value ;)
+            # - name: LULULEMON_URI
+            #   value: https://some-lululemon-product.com # TODO: change this value ;)
             # Warning: You need to define this secret in your config.
             - name: SLACK_WEBHOOK_URI
               valueFrom:
