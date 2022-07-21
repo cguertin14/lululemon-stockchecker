@@ -32,7 +32,7 @@ func main() {
 
 func slackWebhook(isInStock bool, uri string) error {
 	slackWebhookUri := os.Getenv("SLACK_WEBHOOK_URI")
-	values := map[string]string{"text": fmt.Sprintf("The product %s is **in stock**.", uri)}
+	values := map[string]string{"text": fmt.Sprintf("The product %s is **in stock** :gyrophare: :gyrophare: :gyrophare:.", uri)}
 	if !isInStock {
 		values["text"] = fmt.Sprintf("The product %s is **out-of-stock**.", uri)
 	}
