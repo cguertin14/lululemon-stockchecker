@@ -1,20 +1,20 @@
 # Kubernetes Manifests
 
-Here reside kubernetes manifests to use k3supdater in your cluster. 
-Since `k3supdater` is not web service/microservice but rather a job in itself, it is defined here as  a cronjob that runs `daily`.
+Here reside kubernetes manifests to use lululemon-stockchecker in your cluster. 
+Since `lululemon-stockchecker` is not web service/microservice but rather a job in itself, it is defined here as a cronjob that runs `hourly`.
 
-## Github Access Token Secret
+## Slack Webhook URI Secret
 
-You may notice that inside the `k3supdater-cron` cronjob, it reads a secret called `github-access-token`, but we don't define it.
-That's because you'll have to define it and create it in your cluster before creating the cronjob, like so (make sure to replace the actual token value by yours):
+You may notice that inside the `lululemon-stockchecker-cron` cronjob, it reads a secret called `slack-webhook-uri`, but we don't define it.
+That's because you'll have to define it and create it in your cluster before creating the cronjob, like so (make sure to replace the actual webhook uri value by yours):
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: github-access-token
-  namespace: k3supdater
+  name: slack-webhook-uri
+  namespace: lululemon-stockchecker
 type: Opaque
 data:
-  GITHUB_ACCESS_TOKEN: <YOUR_ACCESS_TOKEN_HERE>
+  SLACK_WEBHOOK_URI: <YOUR_SLACK_WEBHOOK_URI_HERE>
 ```
