@@ -1,6 +1,6 @@
 # lululemon-stockchecker
 
-Simple stock checker for Lululemon products. Given a product URI, if the status code of the web page is **302**, therefore the product is out of stock.
+Simple stock checker for Lululemon **ONLINE ONLY** products. Given a product URI, if the status code of the web page is **302**, therefore the product is out of stock.
 
 ## Product URI
 
