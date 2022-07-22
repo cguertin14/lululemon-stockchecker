@@ -1,54 +1,35 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
-	"strings"
+
+	"github.com/cguertin14/lululemon-stockchecker/pkg/http"
+	"github.com/cguertin14/lululemon-stockchecker/pkg/phantomjs"
+	"github.com/cguertin14/lululemon-stockchecker/pkg/slack"
 )
 
 func main() {
 	uri := os.Getenv("LULULEMON_URI")
-	res, err := http.Get(uri)
+	statusPassed := true
+	contentPassed := true
+
+	// 1. Verify status code
+	statusPassed, err := http.VerifyPageStatusCode(uri)
 	if err != nil {
-		if !strings.Contains(err.Error(), "stopped after") {
-			log.Fatalf("failed to perform GET request: %s", err)
+		log.Fatalf("failed to verify status code: %s", err)
+	}
+
+	// 2. Verify page content
+	if statusPassed {
+		contentPassed, err = phantomjs.VerifyPageContent(uri)
+		if err != nil {
+			log.Fatalf("failed to verify page content: %s", err)
 		}
 	}
 
-	// In the case of an online-only product of one size,
-	// if the page returned status code is 302, the product
-	// is out-of-stock
-	isInStock := res.StatusCode != http.StatusFound
-
-	// Send alert to Slack
-	if err = slackWebhook(isInStock, uri); err != nil {
+	// 3. Send alert to Slack
+	if err = slack.PerformWebhook(statusPassed && contentPassed, uri); err != nil {
 		log.Fatalf("failed to inform slack: %s", err)
 	}
-}
-
-func slackWebhook(isInStock bool, uri string) error {
-	slackWebhookUri := os.Getenv("SLACK_WEBHOOK_URI")
-	values := map[string]string{"text": fmt.Sprintf("The product %s is **in stock** :gyrophare: :gyrophare: :gyrophare:.", uri)}
-	if !isInStock {
-		values["text"] = fmt.Sprintf("The product %s is **out-of-stock**.", uri)
-	}
-
-	data, err := json.Marshal(values)
-	if err != nil {
-		return err
-	}
-
-	_, err = http.Post(slackWebhookUri, "application/json", bytes.NewBuffer(data))
-	if err != nil {
-		return err
-	}
-
-	// Print alert to stdout
-	fmt.Println(values["text"])
-
-	return nil
 }
