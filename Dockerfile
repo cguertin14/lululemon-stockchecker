@@ -22,13 +22,16 @@ RUN addgroup -S stockchecker-group && \
 # runtime stage
 FROM ubuntu:20.04
 
+ARG TARGETARCH
+ENV CPU_ARCH=${TARGETARCH}
+
 RUN apt update
 RUN apt install wget libfontconfig openssl ca-certificates -y
 
 # Install phantomjs
-RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-RUN tar -xvf phantomjs-2.1.1-linux-x86_64.tar.bz2
-RUN cp ./phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+WORKDIR /app
+COPY ./scripts/install_phantomjs.sh .
+RUN bash ./install_phantomjs.sh
 
 COPY --from=builder /app/stockchecker /stockchecker
 COPY --from=builder /etc/passwd /etc/passwd

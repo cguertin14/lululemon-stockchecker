@@ -1,4 +1,4 @@
-name: Release app
+name: Push docker image to Quay
 
 on:
   push:
@@ -16,11 +16,7 @@ jobs:
         id: prep
         run: |
           VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
-          GIT_COMMIT=$(git rev-parse --short HEAD)
-          BUILD_DATE=$(date '+%FT%TZ')
           echo ::set-output name=version::${VERSION}
-          echo ::set-output name=git_commit::${GIT_COMMIT}
-          echo ::set-output name=build_date::${BUILD_DATE}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -49,7 +45,7 @@ jobs:
             GIT_COMMIT=${{ steps.prep.outputs.git_commit }}
             BUILD_DATE=${{ steps.prep.outputs.build_date }}
           context: ./
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             quay.io/cguertin14/lululemon-stockchecker:latest
