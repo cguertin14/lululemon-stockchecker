@@ -15,8 +15,6 @@ COPY go.* ./
 COPY . ./
 RUN go mod download
 RUN go build -o ./stockchecker .
-RUN addgroup -S stockchecker-group && \
-    adduser -S stockchecker-user -G stockchecker-group
 
 
 # phantomjs stage
@@ -24,15 +22,14 @@ FROM gounthar/phantomjs:aarch64 as phantomjs
 
 
 # runtime stage
-FROM ubuntu:20.04
+FROM alpine:3.16
 
-RUN apt update
-RUN apt install build-essential ca-certificates libfontconfig libfreetype6 libssl-dev -y
+RUN apk --update install fontconfig freetype6 ca-certificates
 
 COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
-# COPY --from=builder /etc/passwd /etc/passwd
-
-# USER stockchecker-user
+RUN addgroup -S stockchecker-group && \
+    adduser -S stockchecker-user -G stockchecker-group
+USER stockchecker-user
 
 # ENTRYPOINT ["/stockchecker"]
