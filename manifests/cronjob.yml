@@ -4,7 +4,7 @@ metadata:
   name: lululemon-stockchecker-cron
 spec:
   # Cronjob will run every hour to check for product availability.
-  schedule: '@hourly'
+  schedule: '*/3 * * * *' # '@hourly' -- TODO: Replace after testing over
   # Keep all jobs from the last 24 hours
   successfulJobsHistoryLimit: 24
   failedJobsHistoryLimit: 24
@@ -26,9 +26,9 @@ spec:
                   name: slack-webhook-uri
             resources:
               limits:
-                cpu: 100m
-                memory: 64Mi
+                cpu: 500m
+                memory: 256Mi
               requests:
-                cpu: 50m
-                memory: 32Mi
+                cpu: 250m
+                memory: 128Mi
           restartPolicy: OnFailure

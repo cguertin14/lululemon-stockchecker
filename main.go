@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/cguertin14/lululemon-stockchecker/pkg/browser"
 	"github.com/cguertin14/lululemon-stockchecker/pkg/http"
-	"github.com/cguertin14/lululemon-stockchecker/pkg/phantomjs"
 	"github.com/cguertin14/lululemon-stockchecker/pkg/slack"
 )
 
@@ -22,7 +22,7 @@ func main() {
 
 	// 2. Verify page content
 	if statusPassed {
-		contentPassed, err = phantomjs.VerifyPageContent(uri)
+		contentPassed, err = browser.VerifyPageContent(uri)
 		if err != nil {
 			log.Fatalf("failed to verify page content: %s", err)
 		}

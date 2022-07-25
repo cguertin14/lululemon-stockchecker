@@ -4,7 +4,6 @@ FROM golang:1.18.4-alpine as builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
-
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
@@ -15,25 +14,46 @@ COPY go.* ./
 COPY . ./
 RUN go mod download
 RUN go build -o ./stockchecker .
-RUN addgroup -S stockchecker-group && \
-    adduser -S stockchecker-user -G stockchecker-group
-
-
-# phantomjs stage
-FROM gounthar/phantomjs:aarch64 as phantomjs
 
 
 # runtime stage
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-RUN apt update
-RUN apt install wget libfontconfig openssl ca-certificates -y
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ENV CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT}
 
-# Install phantomjs
-COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
-COPY --from=builder /etc/passwd /etc/passwd
+RUN apt update
+RUN apt install --no-install-recommends -y \
+     # chromium dependencies
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libxtst6 \
+    libgtk-3-0 \
+    libgbm1 \
+    ca-certificates \
+    # fonts
+    fonts-liberation fonts-noto-color-emoji fonts-noto-cjk \
+    # timezone
+    tzdata \
+    # processs reaper
+    dumb-init \
+    # headful mode support, for example: $ xvfb-run chromium-browser --remote-debugging-port=9222
+    xvfb \
+    # cleanup
+    && rm -rf /var/lib/apt/lists/*
 
-USER stockchecker-user
+
+RUN groupadd stockchecker && \
+    useradd -r -u 1001 -d /home/stockchecker -g stockchecker stockchecker
+RUN mkdir /home/stockchecker
+RUN chown -R stockchecker:stockchecker /home/stockchecker
+USER stockchecker
 
 ENTRYPOINT ["/stockchecker"]
