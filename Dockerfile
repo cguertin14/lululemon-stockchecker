@@ -49,4 +49,11 @@ RUN apt install --no-install-recommends -y \
     # cleanup
     && rm -rf /var/lib/apt/lists/*
 
+
+RUN groupadd stockchecker && \
+    useradd -r -u 1001 -d /home/stockchecker -g stockchecker stockchecker
+RUN mkdir /home/stockchecker
+RUN chown -R stockchecker:stockchecker /home/stockchecker
+USER stockchecker
+
 ENTRYPOINT ["/stockchecker"]
