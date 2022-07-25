@@ -31,8 +31,8 @@ RUN apt install build-essential ca-certificates libfontconfig libfreetype6 libss
 
 COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
-COPY --from=builder /etc/passwd /etc/passwd
+# COPY --from=builder /etc/passwd /etc/passwd
 
-USER stockchecker-user
+# USER stockchecker-user
 
-ENTRYPOINT ["/stockchecker"]
+# ENTRYPOINT ["/stockchecker"]
