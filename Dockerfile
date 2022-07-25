@@ -27,7 +27,7 @@ FROM gounthar/phantomjs:aarch64 as phantomjs
 FROM ubuntu:20.04
 
 RUN apt update
-RUN apt install build-essential libfontconfig libfreetype6 libssl-dev -y
+RUN apt install build-essential ca-certificates libfontconfig libfreetype6 libssl-dev -y
 
 COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
