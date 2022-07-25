@@ -4,7 +4,6 @@ FROM golang:1.18.4-alpine as builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
-
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
@@ -17,53 +16,37 @@ RUN go mod download
 RUN go build -o ./stockchecker .
 
 
-# phantomjs stage
-FROM gounthar/phantomjs:aarch64 as phantomjs
-
-
 # runtime stage
-FROM alpine:3.14
+FROM ubuntu:22.04
 
-RUN apk add --no-cache --virtual build-dependencies \
-        alpine-sdk \
-        autoconf \
-        bash \
-        bison \
-        build-base \
-        cmake \
-        flex \
-        fontconfig-dev \
-        freetype-dev \
-        g++ \
-        gcc \
-        git \
-        gperf \
-        qt5-qtwebkit-dev \
-        icu-dev \
-        libpng-dev \ 
-        jpeg \
-        make \
-        nodejs \
-        npm \
-        openssl-dev \ 
-        protobuf-dev \
-        python3 \
-        qt5-qtbase-dev \
-        ruby \
-        sqlite-dev \
-        wget
-
-# RUN apk add --update --no-cache alpine-sdk \
-#     fontconfig freetype ca-certificates qt5-qtwebkit-dev qt5-qtbase-dev \
-#     g++ gcc icu-dev libpng-dev jpeg openssl-dev sqlite-dev
-# RUN addgroup -S stockchecker-group && \
-#     adduser -S stockchecker-user -G stockchecker-group
-
-COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
-# RUN phantomjs --version
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ENV CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT}
 
 COPY --from=builder /app/stockchecker /stockchecker
+RUN apt update
+RUN apt install --no-install-recommends -y \
+     # chromium dependencies
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libxtst6 \
+    libgtk-3-0 \
+    libgbm1 \
+    ca-certificates \
+    # fonts
+    fonts-liberation fonts-noto-color-emoji fonts-noto-cjk \
+    # timezone
+    tzdata \
+    # processs reaper
+    dumb-init \
+    # headful mode support, for example: $ xvfb-run chromium-browser --remote-debugging-port=9222
+    xvfb \
+    # cleanup
+    && rm -rf /var/lib/apt/lists/*
 
-# USER stockchecker-user
-
-# ENTRYPOINT ["/stockchecker"]
+ENTRYPOINT ["/stockchecker"]
