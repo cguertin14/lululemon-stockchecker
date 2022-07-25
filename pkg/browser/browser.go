@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	pageTimeout time.Duration = 15 * time.Second
+	pageTimeout time.Duration = 2 * time.Minute
 )
 
 func VerifyPageContent(uri string) (bool, error) {
