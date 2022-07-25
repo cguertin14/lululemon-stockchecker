@@ -24,7 +24,7 @@ FROM gounthar/phantomjs:aarch64 as phantomjs
 
 
 # runtime stage
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt update
 RUN apt install wget libfontconfig openssl ca-certificates -y
