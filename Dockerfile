@@ -24,12 +24,13 @@ FROM gounthar/phantomjs:aarch64 as phantomjs
 # runtime stage
 FROM alpine:3.16
 
-RUN apk --update install fontconfig freetype6 ca-certificates
+RUN apk add --update --no-cache fontconfig freetype6 ca-certificates
+RUN addgroup -S stockchecker-group && \
+    adduser -S stockchecker-user -G stockchecker-group
 
 COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
-RUN addgroup -S stockchecker-group && \
-    adduser -S stockchecker-user -G stockchecker-group
+
 USER stockchecker-user
 
 # ENTRYPOINT ["/stockchecker"]
