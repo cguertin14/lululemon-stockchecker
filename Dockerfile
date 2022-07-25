@@ -30,7 +30,7 @@ RUN apt update
 RUN apt install wget libfontconfig openssl ca-certificates -y
 
 # Install phantomjs
-COPY --from=phantomjs /usr/local/bin/phantomjs /usr/local/bin/phantomjs
+COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 COPY --from=builder /app/stockchecker /stockchecker
 COPY --from=builder /etc/passwd /etc/passwd
 
