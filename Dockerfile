@@ -24,8 +24,11 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update
-RUN apt install wget libfontconfig openssl ca-certificates phantomjs -y
+RUN apt install build-essential g++ flex bison gperf ruby perl \
+  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
+  libpng-dev libjpeg-dev python libx11-dev libxext-dev phantomjs -y
 
+RUN phantomjs --version
 COPY --from=builder /app/stockchecker /stockchecker
 COPY --from=builder /etc/passwd /etc/passwd
 
