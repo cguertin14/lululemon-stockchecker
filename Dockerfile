@@ -24,7 +24,7 @@ FROM gounthar/phantomjs:aarch64 as phantomjs
 # runtime stage
 FROM alpine:3.16
 
-RUN apk add --update --no-cache fontconfig freetype6 ca-certificates
+RUN apk add --update --no-cache fontconfig freetype ca-certificates
 RUN addgroup -S stockchecker-group && \
     adduser -S stockchecker-user -G stockchecker-group
 
