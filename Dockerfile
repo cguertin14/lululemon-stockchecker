@@ -64,6 +64,6 @@ COPY --from=phantomjs /opt/phantomjs/bin/phantomjs /usr/local/bin/phantomjs
 
 COPY --from=builder /app/stockchecker /stockchecker
 
-USER stockchecker-user
+# USER stockchecker-user
 
 # ENTRYPOINT ["/stockchecker"]
