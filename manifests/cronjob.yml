@@ -4,7 +4,7 @@ metadata:
   name: lululemon-stockchecker-cron
 spec:
   # Cronjob will run every hour to check for product availability.
-  schedule: '*/3 * * * *' # '@hourly' -- TODO: Replace after testing over
+  schedule: '@hourly'
   # Keep all jobs from the last 24 hours
   successfulJobsHistoryLimit: 24
   failedJobsHistoryLimit: 24
