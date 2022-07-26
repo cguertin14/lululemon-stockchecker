@@ -10,7 +10,7 @@ import (
 
 func SendMessage(message string) error {
 	// TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN are automatically
-	// retrieved from the environment variabls
+	// retrieved from the environment variables
 	client := twilio.NewRestClient()
 
 	// Phone numbers env variables
