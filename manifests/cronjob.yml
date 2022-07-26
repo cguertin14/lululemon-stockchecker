@@ -24,6 +24,26 @@ spec:
                 secretKeyRef:
                   key: SLACK_WEBHOOK_URI
                   name: slack-webhook-uri
+            - name: SMS_SENDER_PHONE_NUM
+              valueFrom:
+                secretKeyRef:
+                  key: SMS_SENDER_PHONE_NUM
+                  name: twilio-settings
+            - name: SMS_RECIPIENT_PHONE_NUM
+              valueFrom:
+                secretKeyRef:
+                  key: SMS_RECIPIENT_PHONE_NUM
+                  name: twilio-settings
+            - name: TWILIO_ACCOUNT_SID
+              valueFrom:
+                secretKeyRef:
+                  key: TWILIO_ACCOUNT_SID
+                  name: twilio-settings
+            - name: TWILIO_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: TWILIO_AUTH_TOKEN
+                  name: twilio-settings
             resources:
               limits:
                 cpu: 500m
