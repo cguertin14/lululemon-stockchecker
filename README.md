@@ -9,3 +9,12 @@ The product URI can be set using the `LULULEMON_URI` environment variable. A goo
 ## Alerts on Slack
 
 Alerts via Slack work when the `SLACK_WEBHOOK_URI` environment variable is set. This variable represents the URI of a Slack Incoming Webhook.
+
+## Alerts via SMS
+
+Alerts via SMS are sent when a product is **in stock** only, using [Twilio's Go SDK](https://www.twilio.com/docs/libraries/go). The following environment variables must be set for the SDK to work properly:
+
+* `SMS_SENDER_PHONE_NUM` -> your twilio phone number
+* `SMS_RECIPIENT_PHONE_NUM` -> the phone number you want the sms to be sent to
+* `TWILIO_ACCOUNT_SID` -> your twilio accound sid
+* `TWILIO_AUTH_TOKEN` -> your twilio auth token
