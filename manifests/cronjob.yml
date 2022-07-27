@@ -3,11 +3,11 @@ kind: CronJob
 metadata:
   name: lululemon-stockchecker-cron
 spec:
-  # Cronjob will run every hour to check for product availability.
-  schedule: '@hourly'
-  # Keep all jobs from the last 24 hours
-  successfulJobsHistoryLimit: 24
-  failedJobsHistoryLimit: 24
+  # Cronjob will run every 20 minutes to check for product availability.
+  schedule: '*/20 * * * *'
+  # Keep all jobs from the last 12 hours, 12 hours * 3 jobs/hour = 36 jobs
+  successfulJobsHistoryLimit: 36
+  failedJobsHistoryLimit: 36
   jobTemplate:
     spec:
       template:
