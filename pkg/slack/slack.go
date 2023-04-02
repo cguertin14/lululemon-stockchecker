@@ -50,7 +50,7 @@ func PerformWebhook(isInStock bool, uri string) error {
 		return err
 	}
 	if res.StatusCode == http.StatusNotFound {
-		return errors.New("slack webhook link return a 404 status code, please change it")
+		return errors.New("slack webhook link returned a 404 status code, please change it")
 	}
 	defer res.Body.Close()
 

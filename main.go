@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/cguertin14/lululemon-stockchecker/pkg/browser"
 	"github.com/cguertin14/lululemon-stockchecker/pkg/http"
 	"github.com/cguertin14/lululemon-stockchecker/pkg/slack"
-	"github.com/cguertin14/lululemon-stockchecker/pkg/sms"
 )
 
 func main() {
@@ -31,16 +29,8 @@ func main() {
 	}
 
 	// 3. Send alert to Slack
-	if err = slack.PerformWebhook(statusPassed && contentPassed, uri); err != nil {
+	isInStock := statusPassed && contentPassed
+	if err = slack.PerformWebhook(isInStock, uri); err != nil {
 		log.Fatalf("failed to inform slack: %s", err)
-	}
-
-	// 4. Send text message if product is in stock
-	if statusPassed && contentPassed {
-		if err := sms.SendMessage(
-			fmt.Sprintf("The product %s is *in stock*, hurry up! 👀👀👀", uri),
-		); err != nil {
-			log.Fatalf("failed to send sms: %s", err)
-		}
 	}
 }
