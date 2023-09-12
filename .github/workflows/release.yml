@@ -19,7 +19,7 @@ jobs:
           echo ::set-output name=version::${VERSION}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: all
 
