@@ -17,7 +17,7 @@ RUN go build -o ./stockchecker .
 
 
 # runtime stage
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG TARGETOS
 ARG TARGETARCH
